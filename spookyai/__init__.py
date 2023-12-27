@@ -70,14 +70,16 @@ def query_human(query: str) -> str:
         return e
         
 
+def human_approval(query: str) -> str:
+    pass
 
-class QueryHumanInput(BaseModel):
+class _HumanQueryInput(BaseModel):
     query: str = Field()
 
-class QueryHuman(BaseTool):
+class _HumanQuery(BaseTool):
     name = "QueryHuman"
     description = "useful for when you need to ask your human a question- for permission, to get personal info you can't find elsewhere, and much more"
-    args_schema: type[BaseModel] = QueryHumanInput
+    args_schema: type[BaseModel] = _HumanQueryInput
 
     def _run(
         self, query: str, run_manager: None
@@ -91,3 +93,35 @@ class QueryHuman(BaseTool):
     ) -> str:
         return self._run(query, run_manager)
         
+        
+#Agent Consent Tool: sends a notification to the user asking for consent to use their data
+class _HumanApprovalInput(BaseModel):
+    query: str = Field()
+    
+class _HumanApproval(BaseTool):
+    name = "HumanApproval"
+    description = "useful for when you need to ask your human for confirmation before doing something - for example, using a important tool, or sending a message to someone"
+    args_schema: type[BaseModel] = _HumanApprovalInput
+
+    def _run(
+        self, query: str, run_manager: None
+    ) -> str:
+        """Use the tool."""
+        return human_approval(query)
+            
+
+    async def _arun(
+        self, query: str, run_manager: None
+    ) -> str:
+        return self._run(query, run_manager)
+
+
+
+#Agent Stuck in a Loop : sends time sensitive notification to user
+
+
+#human consent tool: sends a notification to the user asking for consent to use their data    
+    
+    
+HumanQuery = _HumanQuery()
+HumanApproval = _HumanApproval()
