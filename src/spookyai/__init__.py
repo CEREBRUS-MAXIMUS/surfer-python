@@ -58,7 +58,7 @@ def query_human(query: str) -> str:
     headers = {'Content-Type': 'application/json'}
     
     try:
-        response = requests.get(url, headers=headers, data=json.dumps(data))
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=None)
         if response.status_code == 200:
             print("Success:", response.json())
             return response.json()
@@ -78,7 +78,7 @@ class _HumanQueryInput(BaseModel):
 
 class _HumanQuery(BaseTool):
     name = "QueryHuman"
-    description = "useful for when you need to ask your human a question- for permission, to get personal info you can't find elsewhere, and much more"
+    description = "useful for when you need to ask your human a question- for permission, to get personal info you can't find elsewhere, and much more. Only argument is query (String)"
     args_schema: type[BaseModel] = _HumanQueryInput
 
     def _run(

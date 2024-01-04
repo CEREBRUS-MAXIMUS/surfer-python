@@ -1,6 +1,6 @@
 [project]
 name = "spookyai"
-version = "0.1.1"
+version = "0.1.14"
 description = "The official Python library for the Spooky HumanAPI"
 readme = "README.md"
 license = "Apache-2.0"
@@ -14,7 +14,8 @@ dependencies = [
     "anyio>=3.5.0, <5",
     "distro>=1.7.0, <2",
     "sniffio",
-    "tqdm > 4"
+    "requests",
+    "langchain",
 ]
 requires-python = ">= 3.7.1"
 classifiers = [
@@ -36,12 +37,54 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-datalib = []
+datalib = ["numpy >= 1", "pandas >= 1.2.3", "pandas-stubs >= 1.1.0.11"]
 
 [project.urls]
 Homepage = "https://github.com/CEREBRUS-MAXIMUS/spookyai-python"
 Repository = "https://github.com/CEREBRUS-MAXIMUS/spookyai-python"
 
+[project.scripts]
+spookyai = "spookyai.cli:main"
+
+[tool.rye]
+managed = true
+# version pins are in requirements-dev.lock
+dev-dependencies = [
+    "pyright",
+    "mypy",
+    "respx",
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+    "isort",
+    "time-machine",
+    "nox",
+    "dirty-equals>=0.6.0",
+    "importlib-metadata>=6.7.0",
+]
+
+[tool.rye.scripts]
+format = { chain = [
+  "format:ruff",
+  "format:docs",
+  "fix:ruff",
+  "format:isort",
+]}
+"format:black" = "black ."
+"format:docs" = "python bin/ruffen-docs.py README.md api.md"
+"format:ruff" = "ruff format"
+"format:isort" = "isort ."
+
+"check:ruff" = "ruff ."
+"fix:ruff" = "ruff --fix ."
+
+typecheck = { chain = [
+  "typecheck:pyright",
+  "typecheck:mypy"
+]}
+"typecheck:pyright" = "pyright"
+"typecheck:verify-types" = "pyright --verifytypes spookyai --ignoreexternal"
+"typecheck:mypy" = "mypy ."
 
 [build-system]
 requires = ["hatchling"]
@@ -53,7 +96,7 @@ include = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["spookyai"]
+packages = ["src/spookyai"]
 
 [tool.black]
 line-length = 120
