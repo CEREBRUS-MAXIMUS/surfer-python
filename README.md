@@ -114,3 +114,8 @@ If you have an idea for an improvement or new feature :rocket:, please open a [f
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
 
 https://medium.com/analytics-vidhya/how-to-create-a-python-library-7d5aea80cc3f
+
+## Build
+1. Increment Version in pyproject.toml
+2. Run 'python3 -m build'
+3. Run 'python3 -m twine upload dist/*'

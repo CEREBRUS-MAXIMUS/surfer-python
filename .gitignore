@@ -151,3 +151,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 tests/test_spooky_private.py
+pyPiCreds.txt
+tests/test_spooky_full.py
+tests/test_query_human.py
+tests/test_spooky_autogen.py
