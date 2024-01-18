@@ -8,13 +8,10 @@ from langchain.tools import BaseTool
 from datetime import datetime
 
 
-api_key: str | None = _os.environ.get("SPOOKY_API_KEY")
-
-agent_id: str | None = _os.environ.get("SPOOKY_AGENT_ID")
-
-agent_name: str | None = _os.environ.get("SPOOKY_AGENT_NAME")
-
-agent_image: str | None = _os.environ.get("SPOOKY_AGENT_IMAGE")
+api_key = _os.environ.get("SPOOKY_API_KEY", "")
+agent_id = _os.environ.get("SPOOKY_AGENT_ID", "")
+agent_name = _os.environ.get("SPOOKY_AGENT_NAME", "")
+agent_image = _os.environ.get("SPOOKY_AGENT_IMAGE", "")
 
 SPOOKY_URL = "https://cerebrus-prod-eastus.azurewebsites.net/"
 
@@ -34,6 +31,21 @@ def query_human(query: str, metadata: str = "", timeout: int = 86400) -> str:
     
     #make a unique ID for the query with the userID and timestamp
     queryID = api_key + "-" + str(current_time)
+    
+    #make sure all the required environment variables are set
+    if api_key is None:
+        raise ValueError("SPOOKY_API_KEY environment variable not set")
+    
+    if agent_id is None:
+        raise ValueError("SPOOKY_AGENT_ID environment variable not set")
+    
+    if agent_name is None:
+        raise ValueError("SPOOKY_AGENT_NAME environment variable not set")
+    
+    if "agent_image" in globals():
+        agent_image = globals()["agent_image"]
+    else:
+        agent_image = ""
 
     data = {
         "apiKey": api_key,
