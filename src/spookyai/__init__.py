@@ -30,7 +30,7 @@ def query_human(query: str, metadata: str = "", timeout: int = 86400) -> str:
     current_time = datetime.timestamp(now)
     
     #make a unique ID for the query with the userID and timestamp
-    queryID = api_key + "-" + str(current_time)
+    communicationID = api_key + "-" + str(current_time)
     
     #make sure all the required environment variables are set
     if api_key is None:
@@ -49,8 +49,8 @@ def query_human(query: str, metadata: str = "", timeout: int = 86400) -> str:
 
     data = {
         "apiKey": api_key,
-        "query": query,
-        "queryID": queryID,
+        "message": query,
+        "communicationID": communicationID,
         "agentID": agent_id,
         "agentImage": agent_image, #optional, defaults to spooky logo
         "agentName": agent_name,
@@ -90,28 +90,113 @@ def query_human(query: str, metadata: str = "", timeout: int = 86400) -> str:
 def human_approval(query: str) -> str:
     pass
 
+def notify_human(message: str, metadata: str = "") -> str:
+    """
+    Notify a human of something.
+    :param message: The message to send to the human.
+    :param metadata: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent. This is optional, but highly recommended. It is in Markdown.
+    """
+    
+    #get the current unix timestamp
+    now = datetime.now()
+    current_time = datetime.timestamp(now)
+    
+    #make a unique ID for the query with the userID and timestamp
+    communicationID = api_key + "-" + str(current_time)
+    
+    #make sure all the required environment variables are set
+    if api_key is None:
+        raise ValueError("SPOOKY_API_KEY environment variable not set")
+    
+    if agent_id is None:
+        raise ValueError("SPOOKY_AGENT_ID environment variable not set")
+    
+    if agent_name is None:
+        raise ValueError("SPOOKY_AGENT_NAME environment variable not set")
+    
+    if "agent_image" in globals():
+        agent_image = globals()["agent_image"]
+    else:
+        agent_image = ""
+
+    data = {
+        "apiKey": api_key,
+        "message": message,
+        "communicationID": communicationID,
+        "agentID": agent_id,
+        "agentImage": agent_image, #optional, defaults to spooky logo
+        "agentName": agent_name,
+        "metadata": metadata,
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+    }
+
+    url = SPOOKY_URL + "notifyHuman"
+    headers = {'Content-Type': 'application/json'}
+
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(data)) #4 Minutes
+        if response.status_code == 200:
+            print("Success:", response.json())
+            return response.json()
+        else:
+            print("Error:", response.json())
+            return response.json()
+    except requests.exceptions.RequestException as e:
+        print("Request failed:", e)
+        return "Request failed"
+
 class _HumanQueryInput(BaseModel):
     query: str = Field()
     metadata: str = Field() #In Markdown: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent.
 
 class _HumanQuery(BaseTool):
     name = "QueryHuman"
-    description = "useful for when you need to ask your human a question- for permission, to get personal info you can't find elsewhere, and much more. Use sparingly. Arguments: query: the question you want to ask your human. metadata: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent. This is optional, but highly recommended. It is in Markdown."
+    description = "useful for when you need to ask your human a question- for permission, to get personal info you can't find elsewhere, and much more. Use very sparingly. Arguments: query: the question you want to ask your human."
     args_schema: type[BaseModel] = _HumanQueryInput
 
     def _run(
-        self, query: str, metadata: str, run_manager: None
+        self, query: str, run_manager: None
     ) -> str:
         """Use the tool."""
-        return query_human(query, metadata)
+        return query_human(query, "")
             
 
     async def _arun(
-        self, query: str, metadata: str, run_manager: None
+        self, query: str, run_manager: None
     ) -> str:
-        return self._run(query, metadata, run_manager)
+        return self._run(query, run_manager)
         
         
+class _HumanNotifyInput(BaseModel):
+    message: str = Field()
+    metadata: str = Field() #In Markdown: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent.
+
+class _HumanNotify(BaseTool):
+    name = "NotifyHuman"
+    description = "useful for when you need to notify your human of something- for example, if you need to tell them that you are about to do something, or that something has happened. Use very sparingly. Arguments: message: the message you want to send your human."
+    args_schema: type[BaseModel] = _HumanNotifyInput
+
+    def _run(
+        self, message: str, run_manager: None
+    ) -> str:
+        """Use the tool."""
+        return notify_human(message, "")
+            
+
+    async def _arun(
+        self, message: str, run_manager: None
+    ) -> str:
+        return self._run(message, run_manager)
+        
+        
+
+
+
+
+
 #Agent Consent Tool: sends a notification to the user asking for consent to use their data
 class _HumanApprovalInput(BaseModel):
     query: str = Field()
@@ -142,4 +227,4 @@ class _HumanApproval(BaseTool):
     
     
 HumanQuery = _HumanQuery()
-HumanApproval = _HumanApproval()
+HumanNotify = _HumanNotify()
