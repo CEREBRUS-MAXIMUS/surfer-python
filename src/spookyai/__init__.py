@@ -13,7 +13,7 @@ agent_id = _os.environ.get("SPOOKY_AGENT_ID", "")
 agent_name = _os.environ.get("SPOOKY_AGENT_NAME", "")
 agent_image = _os.environ.get("SPOOKY_AGENT_IMAGE", "")
 
-SPOOKY_URL = "https://cerebrus-prod-eastus.azurewebsites.net/"
+SPOOKY_URL = "https://maximus-prod-eastus.azurewebsites.net/"
 
 
 def query_human(query: str, metadata: str = "", timeout: int = 86400) -> str:
