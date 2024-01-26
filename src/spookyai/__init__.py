@@ -150,7 +150,7 @@ def notify_human(message: str, metadata: str = "") -> str:
 
 class _HumanQueryInput(BaseModel):
     query: str = Field()
-    metadata: str = Field() #In Markdown: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent.
+    # metadata: str = Field() #In Markdown: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent.
 
 class _HumanQuery(BaseTool):
     name = "QueryHuman"
@@ -172,7 +172,7 @@ class _HumanQuery(BaseTool):
         
 class _HumanNotifyInput(BaseModel):
     message: str = Field()
-    metadata: str = Field() #In Markdown: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent.
+    # metadata: str = Field() #In Markdown: All relevant information about the query, including the context in which it is being asked, and the consequences of the answer. This is what the user will see when they are asked for their consent.
 
 class _HumanNotify(BaseTool):
     name = "NotifyHuman"
