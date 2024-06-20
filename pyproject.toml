@@ -1,7 +1,7 @@
 [project]
-name = "spookyai"
-version = "0.1.28"
-description = "The official Python library for the Spooky HumanAPI"
+name = "surferai"
+version = "0.1.1"
+description = "The official Python library for the Surfer HumanAPI"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [
@@ -15,7 +15,6 @@ dependencies = [
     "distro>=1.7.0, <2",
     "sniffio",
     "requests",
-    "langchain",
 ]
 requires-python = ">= 3.7.1"
 classifiers = [
@@ -40,11 +39,11 @@ classifiers = [
 datalib = ["numpy >= 1", "pandas >= 1.2.3", "pandas-stubs >= 1.1.0.11"]
 
 [project.urls]
-Homepage = "https://github.com/CEREBRUS-MAXIMUS/spookyai-python"
-Repository = "https://github.com/CEREBRUS-MAXIMUS/spookyai-python"
+Homepage = "https://github.com/CEREBRUS-MAXIMUS/surfer-python"
+Repository = "https://github.com/CEREBRUS-MAXIMUS/surfer-python"
 
 [project.scripts]
-spookyai = "spookyai.cli:main"
+surfer = "surfer.cli:main"
 
 [tool.rye]
 managed = true
@@ -83,7 +82,7 @@ typecheck = { chain = [
   "typecheck:mypy"
 ]}
 "typecheck:pyright" = "pyright"
-"typecheck:verify-types" = "pyright --verifytypes spookyai --ignoreexternal"
+"typecheck:verify-types" = "pyright --verifytypes surfer --ignoreexternal"
 "typecheck:mypy" = "mypy ."
 
 [build-system]
@@ -96,7 +95,7 @@ include = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/spookyai"]
+packages = ["src/surfer"]
 
 [tool.black]
 line-length = 120

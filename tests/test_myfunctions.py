@@ -1,12 +1,21 @@
-import spookyai
+import surferai
+from pydantic import BaseModel
+from typing import Optional
 
-spookyai.api_key = "W0jY4BtoMKX9HDXoCYHfWImECZu1"
-spookyai.agent_id = "5f9b1b4e4f9b4a0007f1e2a9"
-spookyai.agent_name = "Jack's AI Agent"
 
-def test_query_human():
-    
-    spookyai.query_human("What is the weather like today?")
-    
-    assert spookyai.query_human("What is the weather like today?") == "Hello World, this is my first Python library!"
-    
+
+# markdown_result = convertToMarkdown("https://example.com")
+# print("Markdown conversion:", markdown_result)
+
+# Example of parseFromURL
+class StartupWebsite(BaseModel):
+    company_mission: Optional[str]
+    supports_sso: Optional[bool]
+    is_open_source: Optional[bool]
+
+    #A nice to string method
+    def __str__(self):
+        return f"Company Mission: {self.company_mission}\nSupports SSO: {self.supports_sso}\nIs Open Source: {self.is_open_source}"
+
+startup_data = parseFromURL("https://mendable.ai", StartupWebsite)
+print("Parsed startup data:", startup_data)
