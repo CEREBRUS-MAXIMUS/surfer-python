@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 setup(
     name='surferai',
     packages=find_packages(),
-    version='0.1.1',
+    version='1.1',
     description='A Python client for the Surfer AI API',
     author='Me',
     install_requires=[],
