@@ -3,7 +3,8 @@ import requests
 from typing import Any, Dict, Type, TypeVar, Optional, Union
 from pydantic.fields import ModelField
 
-SURFER_URL = "http://localhost:42069/"
+SURFER_URL = "http://api.surfsup.ai/"
+SURFER_LOCAL_URL = "http://localhost:42069/"
 
 class SurferAPIError(Exception):
     pass
