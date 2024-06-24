@@ -117,5 +117,5 @@ https://medium.com/analytics-vidhya/how-to-create-a-python-library-7d5aea80cc3f
 
 ## Build
 1. Increment Version in pyproject.toml
-2. Run 'python3 -m build'
-3. Run 'python3 -m twine upload dist/*'
+2. Run 'python3 setup.py sdist bdist_wheel'
+3. Run 'twine upload dist/* --verbose'
